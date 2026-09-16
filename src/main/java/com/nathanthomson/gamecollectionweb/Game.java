@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html
+
 @Entity //each entity represents 1 database table, use data which is transferable between users, eg, title and image never change, while rating may be different, so that is handled elsewhere
 public class Game {
 

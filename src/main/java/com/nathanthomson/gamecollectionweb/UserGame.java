@@ -2,6 +2,8 @@ package com.nathanthomson.gamecollectionweb;
 
 import jakarta.persistence.*;
 
+//https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html
+
 @Entity
 public class UserGame {
 

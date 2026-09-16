@@ -1,11 +1,11 @@
 package com.nathanthomson.gamecollectionweb;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+//https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html
 
 @Entity
+@Table(name = "users") //prevent name error
 public class User {
 
     @Id
