@@ -42,4 +42,12 @@ public class UserController {
 
         return new UserResponse(user.getId(), user.getUsername());
     }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+    }
 }

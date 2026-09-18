@@ -2,6 +2,7 @@ package com.nathanthomson.gamecollectionweb;
 
 import com.nathanthomson.gamecollectionweb.dto.AddGameRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserGameController {
     }
 
     @PostMapping
-    public UserGame addGameToCollection(@RequestBody AddGameRequest request, HttpSession session){
+    public UserGame addGameToCollection(@RequestBody @Valid AddGameRequest request, HttpSession session){ //@Valid ensures constrains set up in AddGameRequest are followed
 
         Long userId = (Long) session.getAttribute("userId");
         if(userId == null){
@@ -37,6 +38,7 @@ public class UserGameController {
         }else{
             game = new Game();
             game.setTitle(request.getTitle()); //create and save new game from title.
+            game.setCoverURL(request.getCoverURL());
             game = gameRepository.save(game);  //saves to repository then loaded back in
         }
 

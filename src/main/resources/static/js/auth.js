@@ -66,35 +66,3 @@ loginForm.addEventListener("submit", async (e) => {
     }
 })
 
-//LOAD USERS COLLECTION--------------------------------------------------------------------------------------------
-async function loadCollection(){ //fetch is set to GET default, only changes if told
-    const response = await fetch("/api/usergames/user/collection", {
-        credentials: "include"
-    });
-
-    if(!response.ok){
-        window.location.href = "index.html";
-        return;
-    }
-
-    const collection = await response.json();
-    const container = document.getElementById("collectionContainer");
-    container.innerHTML = "";
-}
-
-//STAR RATING SYSTEM
-//Found pieces online, attach a click listener to every star at once
-//(".star), finds all elements in class star
-//value becomes the number assigned to the selected star
-//value is then set to hidden input 'gameRating'
-document.querySelectorAll(".star").forEach(star =>{
-    star.addEventListener("click", () => {
-
-        const value = star.dataset.value;
-        document.getElementById("gameRating").value = value;
-
-        document.querySelectorAll(".star").forEach(s => {
-            s.classList.toggle("filled", s.dataset.value <= value);
-        }); //loops through each star, comparing its value to chosen rating, if rating is greater than star, fill in star
-    });
-});

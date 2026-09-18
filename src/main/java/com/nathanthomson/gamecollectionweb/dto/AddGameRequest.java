@@ -1,11 +1,18 @@
 package com.nathanthomson.gamecollectionweb.dto;
 
 import com.nathanthomson.gamecollectionweb.Status;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AddGameRequest {
+
+    @NotBlank
     private String title;
+    private String coverURL;
     private Integer rating;
     private String review;
+
+    @NotNull
     private Status status;
 
     public String getTitle() {
@@ -26,6 +33,14 @@ public class AddGameRequest {
 
     public String getReview() {
         return review;
+    }
+
+    public String getCoverURL() {
+        return coverURL;
+    }
+
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
     }
 
     public void setReview(String review) {

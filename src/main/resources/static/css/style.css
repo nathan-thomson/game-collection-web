@@ -1,0 +1,221 @@
+/*GENERAL STYLING*/
+
+.hidden{
+    display: none;
+}
+
+*{
+    box-sizing: border-box; /*fixes padding issues*/
+}
+
+body{
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 500;
+}
+
+.appTitle{
+    text-align: center;
+    color: white;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 100px;
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+/*------------------------------------------------------------------------------------------*/
+/*AUTH PAGE AND SHARED MODAL STYLING*/
+.authPage{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a, #2563eb);
+}
+
+.authWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardModal{
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.cardModal input{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+input, button{
+    font-family: inherit;
+}
+
+.cardModal button{
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+#registerDialog{
+    margin: auto; /*overwrite prev defined margin in cardModal, since dialog provides own centering*/
+}
+#registerDialog::backdrop{
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+}
+#openRegisterbtn{
+    color: #2c6fb8;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+}
+#openRegisterbtn:hover{
+    color: #1a4d85;
+}
+#cancelRegisterbtn{ /* https://stackoverflow.com/questions/18611195/x-close-button-only-using-css */
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+}
+#cancelRegisterbtn:hover{
+    color: #000;
+}
+.signup-prompt{
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+/*---------------------------------------------------------------------------------------------------*/
+/*COLLECTION PAGE SPECIFICS*/
+
+.collectionPage{
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0f172a, #2563eb);
+    position: relative;
+}
+
+.starRating{
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.star{
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star.filled{
+    color: gold;
+}
+
+#collectionContainer{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 20px;
+}
+
+@media (max-width: 768px){
+    #collectionContainer{
+        grid-template-columns: 1fr;
+    }
+}
+
+.gameCard{
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0 ,0.2);
+    transition: transform 0.15s ease;
+}
+
+.gameCard:hover{
+    transform: translateY(-4px);
+}
+
+.cardImage{
+    height: 240px;
+    overflow: hidden;
+}
+
+.cardImage img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cardTitle, .cardStatus, .cardRating, .cardReview{
+    padding: 0 16px;
+}
+
+.cardTitle{
+    margin-top: 12px;
+}
+
+.cardReview{
+    margin-bottom: 16px;
+    color: #555;
+    font-size: 14px;
+}
+
+#openGameDialogbtn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#openGameDialogbtn:hover{
+    transform: translateY(-4px);
+}
+
+#logoutbtn{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#logoutbtn:hover{
+    transform: translateY(-4px);
+}
+

@@ -1,10 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>My Collection</title>
 </head>
-<body>
-$END$
+<body class="collectionPage">
+
+<h1 class="appTitle">MyGameCollection</h1>
+
+<button id="logoutbtn">Logout</button>
+<button type="submit" id="openGameDialogbtn">+ Add Game</button>
+
+<dialog id="addGameDialog" class="cardModal">
+    <button type="button" id="cancelAddGamebtn">&times;</button>
+    <form id="addGameForm">
+        <label for="gameCoverURL">Cover Image URL</label>
+        <input type="text" id="gameCoverURL" placeholder="Paste a link to the cover image">
+        <label for="gameTitle">Title</label>
+        <input type="text" id="gameTitle" placeholder="Enter game title">
+
+        <label>Status</label> <!-- radio allows only 1 selected at a time, pre select want to play-->
+        <div class="statusToggle">
+            <label>
+                <input type="radio" name="gameStatus" value="WANT_TO_PLAY" checked> Want to Play
+            </label>
+            <label>
+                <input type="radio" name="gameStatus" value="PLAYED"> Played
+            </label>
+        </div>
+
+        <label>Rating</label> <!-- Create 5 identical elements, each with a value assigned, all in same class, to be styled together-->
+        <div class="starRating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+        <input type="hidden" id="gameRating"> <!-- selected value ends up stored in hidded input-->
+
+        <label for="gameReview">Game Review</label>
+        <input type="text" id="gameReview" placeholder="Please enter a review for the game">
+
+        <button type="submit">Add to Collection</button>
+    </form>
+</dialog>
+
+<div id="collectionContainer">
+
+</div>
+
+<script src="js/collection.js"></script>
 </body>
 </html>
