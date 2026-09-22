@@ -11,6 +11,5 @@ import java.util.Optional;
 //FOR CONTROLLER: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller.html
 
 public interface UserGameRepository extends JpaRepository<UserGame, Long> {
-    Optional<UserGame> findByUserIdAndGameId(Long userId, Long gameId);
     List<UserGame> findByUserId(Long userId); //return list of userGame by id passed in
 }

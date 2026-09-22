@@ -48,13 +48,19 @@ body{
     margin: 0 auto;
 }
 
-.cardModal input{
+.cardModal input[type="text"], .cardModal input[type="password"]{
     display: block;
     width: 100%;
     padding: 10px;
     margin-bottom: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
+}
+.cardModal input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 input, button{
@@ -85,7 +91,7 @@ input, button{
 #openRegisterbtn:hover{
     color: #1a4d85;
 }
-#cancelRegisterbtn{ /* https://stackoverflow.com/questions/18611195/x-close-button-only-using-css */
+#cancelRegisterbtn, #cancelAddGamebtn, #cancelEditGamebtn{ /* https://stackoverflow.com/questions/18611195/x-close-button-only-using-css */
     position: absolute;
     top: 8px;
     right: 8px;
@@ -115,7 +121,7 @@ input, button{
 .collectionPage{
     min-height: 100vh;
     padding: 40px 20px;
-    background: linear-gradient(135deg, #0f172a, #2563eb);
+    background: linear-gradient(135deg, #0f172a, #2563eb); /*heroicons.com, SVG*/
     position: relative;
 }
 
@@ -156,6 +162,7 @@ input, button{
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0 ,0.2);
     transition: transform 0.15s ease;
+    /*position: relative;*/
 }
 
 .gameCard:hover{
@@ -203,6 +210,11 @@ input, button{
     transform: translateY(-4px);
 }
 
+#addGameDialog::backdrop,#editGameDialog::backdrop{
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+}
+
 #logoutbtn{
     position: absolute;
     top: 20px;
@@ -218,4 +230,82 @@ input, button{
 #logoutbtn:hover{
     transform: translateY(-4px);
 }
+
+.editbtn{
+    border-radius: 8px;
+    bottom: 12px;
+    left: 12px;
+    font-weight: bold;
+    font-size: 18px;
+    background-color: yellow;
+    margin-top: 0;
+    cursor: pointer;
+}
+
+.editbtn:hover{
+    transform: translateY(-1px);
+    background-color: #8B8000;
+}
+
+.deletebtn{
+    border-radius: 8px;
+    bottom: 12px;
+    right: 12px;
+    font-weight: bold;
+    font-size: 18px;
+    background-color: red;
+    margin-top: 0;
+    cursor: pointer;
+}
+
+.deletebtn:hover{
+    transform: translateY(-1px);
+    background-color: darkred;
+}
+
+#addGameDialog, #editGameDialog{
+    margin: auto;
+    position: relative;
+    max-width: 480px;
+    padding: 32px;
+}
+
+.statusToggle{
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.statusToggle label{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+#addGameForm label, #editGameForm label{
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+#addGameForm button[type="submit"], #editGameForm button[type="submit"]{
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#addGameForm button[type="submit"].success, #editGameForm button[type="submit"].success{
+    background: #22c55e;
+    color: white;
+    transform: scale(1.08);
+}
+
+.cardButtons{
+    margin-top: auto; /*pushed this to the bottom*/
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+}
+
+
 

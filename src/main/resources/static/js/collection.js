@@ -13,7 +13,7 @@ async function loadCollection(){ //fetch is set to GET default, only changes if 
     const container = document.getElementById("collectionContainer");
     container.innerHTML = "";
 
-    collection.forEach(entry => createCard(entry));
+    collection.forEach(userGameEntry => createCard(userGameEntry));
 
 }
 
@@ -33,33 +33,40 @@ function renderStars(rating){
 }
 
 
-//BUILD A CARD FROM A USERGAME ENTRY ---------------------------------------------------------------------
+//BUILD A CARD FROM A USERGAME userGameEntry ---------------------------------------------------------------------
 
-function createCard(entry){
+function createCard(userGameEntry){
 
     const container = document.getElementById("collectionContainer");
 
     const card = document.createElement("div");
     card.className = "gameCard";
-    card.dataset.id = entry.id;
+    card.dataset.id = userGameEntry.id;
 
     card.innerHTML = `
             <div class="cardImage">
-                <img src="${entry.game.coverURL}">
+                <img src="${userGameEntry.coverURL}">
             </div>
-            <h3 class="cardTitle">${entry.game.title}</h3>
-            <p class="cardStatus">${entry.status}</p>
-            <div class="cardRating">${renderStars(entry.rating)}</div>
-            <p class="cardReview">${entry.review ?? "No review yet"}</p>
-            <button class="deletebtn">Delete</button>
+            <h3 class="cardTitle">${userGameEntry.title}</h3>
+            <p class="cardStatus">${userGameEntry.status}</p>
+            <div class="cardRating">${renderStars(userGameEntry.rating)}</div>
+            <p class="cardReview">${userGameEntry.review ?? "No review yet"}</p>
+            <div class="cardButtons">
+                <button class="editbtn">Edit</button>
+                <button class="deletebtn">Delete</button>
+            </div>
+            
         `;
+
+    const editbtn = card.querySelector(".editbtn");
+    editbtn.addEventListener("click", () => openEditDialog(userGameEntry, card));
 
     const deletebtn = card.querySelector(".deletebtn");
     deletebtn.addEventListener("click", async () => {
 
         const confirmDelete = confirm("Are you sure you want to delete?");
         if(confirmDelete){
-            const response = await fetch(`/api/usergames/${entry.id}`, {
+            const response = await fetch(`/api/usergames/${userGameEntry.id}`, {
                 method: "DELETE",
                 credentials: "include"
             });
@@ -77,10 +84,75 @@ function createCard(entry){
     img.addEventListener("error", () => {
         img.src = "placeholder.png";
     });
-    img.src = entry.game.coverURL ?? "placeholder.png"; //set src after attaching listener
+    img.src = userGameEntry.coverURL ?? "placeholder.png"; //set src after attaching listener
 
     container.appendChild(card);
 }
+
+//EDIT GAME CARD ------------------------------------------------------------------------------------------
+
+const editGameDialog = document.getElementById("editGameDialog");
+const editGameForm = document.getElementById("editGameForm");
+let editingUserGameEntry = null; //declared outside function to keep track of which userGameEntry and card is being edited
+let editingCard = null;
+
+function openEditDialog(userGameEntry, card){
+    editingUserGameEntry = userGameEntry;
+    editingCard = card;
+
+    document.getElementById("editTitle").value = userGameEntry.title;
+    document.getElementById("editCoverURL").value = userGameEntry.coverURL;
+    document.getElementById("editReview").value = userGameEntry.review;
+    document.getElementById("editRating").value = userGameEntry.value;
+    document.querySelector(`input[name="editStatus"][value="${userGameEntry.status}"]`).checked = true;
+    //cant just set value on radio group, instead find specific radio whose value matches current entrys and set checked=true on it
+
+    showCurrentRating("#editStarRating", userGameEntry.rating);
+    //makes star display visually match the saved rating
+
+    editGameDialog.showModal();
+}
+
+function closeEditDialog(){
+    editGameDialog.close();
+    editingUserGameEntry = null;
+    editingCard = null;
+}
+
+const cancelEditGamebtn = document.getElementById("cancelEditGamebtn");
+cancelEditGamebtn.addEventListener("click", closeEditDialog);
+
+editGameForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById("editTitle").value;
+    const coverURL = document.getElementById("editCoverURL").value;
+    const status = document.querySelector(`input[name="editStatus"]:checked`).value; //get value from the radio input
+    const rating = document.getElementById("editRating").value;
+    const review = document.getElementById("editReview").value;
+
+    const response = await fetch(`/api/usergames/${editingUserGameEntry.id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        credentials: "include",
+        body: JSON.stringify({title, coverURL, status, rating: rating ? Number(rating) : null, review: review || null})
+    });
+
+    if(response.ok){
+        const updatedUserGameEntry = await response.json();
+        editingCard.querySelector(".cardTitle").textContent = updatedUserGameEntry.title;
+        editingCard.querySelector(".cardStatus").textContent = updatedUserGameEntry.status;
+        editingCard.querySelector(".cardRating").innerHTML = renderStars(updatedUserGameEntry.rating);
+        editingCard.querySelector(".cardReview").textContent = updatedUserGameEntry.review;
+        editingCard.querySelector("img").src = updatedUserGameEntry.coverURL ?? "placeholder.png";
+        closeEditDialog();
+        editGameForm.reset();
+    }else{
+        alert("Failed to update game");
+    }
+})
+
+
 
 
 //DISPLAY GAME ADD MODAL-----------------------------------------------------------------------
@@ -120,10 +192,17 @@ addGameForm.addEventListener("submit", async (e) => {
     });
 
     if(response.ok){
-        const newEntry = await response.json();
-        createCard(newEntry);
-        closeGameDialogue();
-        addGameForm.reset();
+        const newuserGameEntry = await response.json();
+
+        const submitBtn = addGameForm.querySelector('button[type="submit"]');
+        submitBtn.classList.add("success"); //If response is ok, add the success class to the button, which shows confirmation
+
+        setTimeout(() => {
+            submitBtn.classList.remove("success") //after delay (to allow show of confirmation), reset dialog
+            createCard(newuserGameEntry);
+            closeGameDialogue();
+            addGameForm.reset();
+        }, 400);
     }else{
         alert("Failed to add game");
     }
@@ -131,21 +210,54 @@ addGameForm.addEventListener("submit", async (e) => {
 
 
 //STAR RATING SYSTEM ---------------------------------------------------------------------------
-//Found pieces online, attach a click listener to every star at once
-//(".star), finds all elements in class star
-//value becomes the number assigned to the selected star
-//value is then set to hidden input 'gameRating'
-document.querySelectorAll(".star").forEach(star =>{
-    star.addEventListener("click", () => {
+// Attaches click behavior to one star widget, scoped to a single container so
+// multiple star widgets (add dialog, edit dialog) can exist independently on
+// the same page without their listeners interfering with each other.
+// Runs ONCE per widget, at page load — it does not display anything itself,
+// it only wires up what happens when a star in this specific container is clicked.
+// On click: reads the clicked star's data-value, writes it into the linked
+// hidden input (this is the actual value sent to the backend), then loops
+// over every star in the container and toggles the "filled" class based on
+// whether that star's own value is <= the clicked value (so clicking star 3
+// fills stars 1-3 and unfills 4-5).
 
-        const value = star.dataset.value;
-        document.getElementById("gameRating").value = value;
+function setupClickableSTars(starContainerSelector, ratingInputId){
+    const starContainer = document.querySelector(starContainerSelector);
+    const ratingInput = document.getElementById(ratingInputId);
 
-        document.querySelectorAll(".star").forEach(s => {
-            s.classList.toggle("filled", s.dataset.value <= value);
-        }); //loops through each star, comparing its value to chosen rating, if rating is greater than star, fill in star
+    starContainer.querySelectorAll(".star").forEach(clickedStar => {
+        clickedStar.addEventListener("click", () => {
+            const value = clickedStar.dataset.value;
+            ratingInput.value = value;
+
+            starContainer.querySelectorAll(".star").forEach(starToUpdate => {
+                starToUpdate.classList.toggle("filled", starToUpdate.dataset.value <= value);
+            });
+        });
     });
-});
+}
+
+
+// Sets the visual filled/unfilled state of a star widget to match a given
+// rating value, without requiring any click to occur. Called each time the
+// edit dialog is OPENED, using the userGameEntry's existing saved rating, so the
+// stars correctly reflect "what this userGameEntry is currently rated" the moment
+// the dialog appears — independent of the click-handling logic above.
+// Does the same <= comparison and "filled" class toggle as the click handler,
+// but is triggered by opening the dialog rather than by user interaction.
+function showCurrentRating(starContainerSelector, currentRating){
+    document.querySelectorAll(`${starContainerSelector} .star`).forEach(starToUpdate => {
+        starToUpdate.classList.toggle("filled", currentRating != null && Number(starToUpdate.dataset.value) <= Number(currentRating));
+    });
+}
+
+setupClickableSTars("#addStarRating", "gameRating"); //add dialogs stars
+
+
+setupClickableSTars("#editStarRating", "editRating"); //edit dialogs stars
+//selects #editStarRating, name of div containing all star spans in edit dialog, and editRating, which is the hidden value applied to the div, storing the int value of edit rating
+//"Set up click behavior for the stars inside #editStarRating, and store whichever one gets clicked into #editRating."
+
 
 //LOGOUT-----------------------------------------------------------------------------------
 

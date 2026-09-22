@@ -8,10 +8,17 @@
 </head>
 <body class="collectionPage">
 
+
+
+<!-- HroIcons.com SVG path copied-->
+
+
 <h1 class="appTitle">MyGameCollection</h1>
 
 <button id="logoutbtn">Logout</button>
 <button type="submit" id="openGameDialogbtn">+ Add Game</button>
+
+<!-- ADD GAME DIALOG -->
 
 <dialog id="addGameDialog" class="cardModal">
     <button type="button" id="cancelAddGamebtn">&times;</button>
@@ -32,7 +39,7 @@
         </div>
 
         <label>Rating</label> <!-- Create 5 identical elements, each with a value assigned, all in same class, to be styled together-->
-        <div class="starRating">
+        <div class="starRating" id="addStarRating">
             <span class="star" data-value="1">★</span>
             <span class="star" data-value="2">★</span>
             <span class="star" data-value="3">★</span>
@@ -45,6 +52,43 @@
         <input type="text" id="gameReview" placeholder="Please enter a review for the game">
 
         <button type="submit">Add to Collection</button>
+    </form>
+</dialog>
+
+<!-- EDIT DIALOG -->
+
+<dialog id="editGameDialog" class="cardModal">
+    <button type="button" id="cancelEditGamebtn">&times;</button>
+    <form id="editGameForm">
+        <label for="gameCoverURL">Cover Image URL</label>
+        <input type="text" id="editCoverURL" placeholder="Paste a link to the cover image">
+        <label for="gameTitle">Title</label>
+        <input type="text" id="editTitle" placeholder="Enter game title">
+
+        <label>Status</label> <!-- radio allows only 1 selected at a time, pre select want to play-->
+        <div class="statusToggle">
+            <label>
+                <input type="radio" name="editStatus" value="WANT_TO_PLAY" checked> Want to Play
+            </label>
+            <label>
+                <input type="radio" name="editStatus" value="PLAYED"> Played
+            </label>
+        </div>
+
+        <label>Rating</label> <!-- Create 5 identical elements, each with a value assigned, all in same class, to be styled together-->
+        <div class="starRating" id="editStarRating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+        <input type="hidden" id="editRating"> <!-- selected value ends up stored in hidded input-->
+
+        <label for="gameReview">Game Review</label>
+        <input type="text" id="editReview" placeholder="Please enter a review for the game">
+
+        <button type="submit">Save Changes</button>
     </form>
 </dialog>
 

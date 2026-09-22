@@ -1,6 +1,7 @@
 package com.nathanthomson.gamecollectionweb;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 //https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html
 
@@ -14,9 +15,9 @@ public class UserGame {
     @ManyToOne
     private User user; //one user can have many usergame rows, GTA, Elden RIng, Hollow knight etc
 
-    @ManyToOne
-    private Game game; //one game can have many gamerows, different users logging same game
-
+    @NotBlank
+    private String title;
+    private String coverURL;
     @Enumerated(EnumType.STRING)
     private Status status; //PLAYER or WANT_TO_PLAY
 
@@ -26,9 +27,8 @@ public class UserGame {
     public UserGame(){
     }
 
-    public UserGame(User user, Game game, Status status){
+    public UserGame(User user, Status status){
         this.user = user;
-        this.game = game;
         this.status = status;
     }
 
@@ -46,14 +46,6 @@ public class UserGame {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public Status getStatus() {
@@ -78,5 +70,21 @@ public class UserGame {
 
     public void setReview(String review) {
         this.review = review;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCoverURL() {
+        return coverURL;
+    }
+
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
     }
 }
