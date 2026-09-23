@@ -4,6 +4,7 @@ A web app for keeping track of the games I own and want to play. You can add a g
 
 I built this to learn Spring Boot after doing my honours project (SQL Solver) in Node/Express. Some of the ideas carried over, but I wanted to see how the same things are done in Java.
 
+![Login Page](login.png)
 ![Collection page](screenshot.png)
 
 ## Built with
