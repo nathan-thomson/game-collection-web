@@ -19,8 +19,19 @@ body{
     font-size: 42px;
     font-weight: 800;
     letter-spacing: 2px;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
     font-family: 'Press Start 2P', sans-serif;
+}
+
+/* gold line under the title */
+.appTitle::after {
+    content: "";
+    display: block;
+    width: 60%;
+    max-width: 700px;
+    height: 2px;
+    margin: 1.2rem auto 0;
+    background: linear-gradient(90deg, transparent 0%, #c9a84c 20%, #c9a84c 80%, transparent 100%);  /* fades out at the ends , color from 20-80 */
 }
 
 /*------------------------------------------------------------------------------------------*/
@@ -155,18 +166,22 @@ input, button{
 }
 
 .gameCard{
-    background: white;
+    background-color: rgba(10, 14, 40, 0.85);
+    color: #f0e6d2;
     border-radius: 12px;
+    border: 2px solid rgba(201, 168, 76, 0.35);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0 ,0.2);
-    transition: transform 0.15s ease;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     /*position: relative;*/
 }
 
 .gameCard:hover{
     transform: translateY(-4px);
+    border-color: #c9a84c;
+    box-shadow: 0 0 16px rgba(201, 168, 76, 0.25);
 }
 
 .cardImage{
@@ -186,11 +201,12 @@ input, button{
 
 .cardTitle{
     margin-top: 12px;
+    color: #f0e6d2;
 }
 
 .cardReview{
     margin-bottom: 16px;
-    color: #555;
+    color: rgba(240, 230, 210, 0.75);
     font-size: 14px;
 }
 
@@ -231,36 +247,38 @@ input, button{
     transform: translateY(-4px);
 }
 
-.editbtn{
-    border-radius: 8px;
-    bottom: 12px;
-    left: 12px;
-    font-weight: bold;
-    font-size: 18px;
-    background-color: yellow;
-    margin-top: 0;
+.editbtn, .deletebtn{
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.editbtn{
+    color: #f0e6d2;
+    border: 2px solid #c9a84c;
 }
 
 .editbtn:hover{
-    transform: translateY(-1px);
-    background-color: #8B8000;
+    background-color: #c9a84c;
+    color: #0a0e28;
+    box-shadow: 0 0 8px #c9a84c;
 }
 
 .deletebtn{
-    border-radius: 8px;
-    bottom: 12px;
-    right: 12px;
-    font-weight: bold;
-    font-size: 18px;
-    background-color: red;
-    margin-top: 0;
-    cursor: pointer;
+    color: #e5534b;
+    border: 2px solid #e5534b;
 }
 
 .deletebtn:hover{
-    transform: translateY(-1px);
-    background-color: darkred;
+    background-color: #e5534b;
+    color: #ffffff;
+    box-shadow: 0 0 8px #e5534b;
 }
 
 #addGameDialog, #editGameDialog{
@@ -308,4 +326,45 @@ input, button{
 }
 
 
+/* OVERWRITE PREVIOUS BUTTON DESIGN WITH STYLE FOUND ON https://freefrontend.com/css-dropdown-menus/*/
+#collectionView, #logoutbtn, #openGameDialogbtn {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #f0e6d2;
+    background-color: rgba(10, 14, 40, 0.75);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 0.55rem 0.9rem;   /* extra right padding makes room for the arrow */
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+}
+
+#collectionView:hover, #logoutbtn:hover, #openGameDialogbtn:hover {
+    border-color: #f5d27a;
+    box-shadow: 0 0 10px rgba(201, 168, 76, 0.4);
+}
+
+#collectionView:focus-visible, #logoutbtn:focus-visible, #openGameDialogbtn:focus-visible {
+    outline: none;
+    border-color: #f5d27a;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.35);
+}
+
+#collectionView{
+    appearance: none;
+    padding-right: 2.5rem;
+    /* custom gold chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a84c' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 14px;
+}
+
+#collectionView option {
+    background-color: #151a3a;        /* keeps the open list dark instead of white */
+    color: #f0e6d2;
+}
 

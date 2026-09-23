@@ -4,6 +4,7 @@ import com.nathanthomson.gamecollectionweb.dto.AddGameRequest;
 import com.nathanthomson.gamecollectionweb.dto.UpdateGameRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,10 +53,17 @@ public class UserGameController {
 
 
     @GetMapping("/user/collection")
-    public List<UserGame> getUserCollection(HttpSession session){
+    public List<UserGame> getUserCollection(@RequestParam(defaultValue = "TITLE_ASC") CollectionView view, HttpSession session){
 
         Long userId = requireLoggedInUserId(session);
-        return userGameRepository.findByUserId(userId);
+        return switch (view){
+            case TITLE_ASC -> userGameRepository.findByUserId(userId, Sort.by("title").ascending());
+            case TITLE_DESC -> userGameRepository.findByUserId(userId, Sort.by("title").descending());
+            case RATING_ASC -> userGameRepository.findByUserId(userId, Sort.by("rating").ascending());
+            case RATING_DESC -> userGameRepository.findByUserId(userId, Sort.by("rating").descending());
+            case PLAYED -> userGameRepository.findByUserIdAndStatus(userId, Status.PLAYED);
+            case WANT_TO_PLAY -> userGameRepository.findByUserIdAndStatus(userId, Status.WANT_TO_PLAY);
+        };
     }
 
     @DeleteMapping("/{id}")

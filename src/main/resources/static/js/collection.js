@@ -1,6 +1,7 @@
 //LOAD USERS COLLECTION--------------------------------------------------------------------------------------------
 async function loadCollection(){ //fetch is set to GET default, only changes if told
-    const response = await fetch("/api/usergames/user/collection", {
+    const filter = document.getElementById("collectionView").value;
+    const response = await fetch(`/api/usergames/user/collection?view=${filter}`, {
         credentials: "include"
     });
 
@@ -103,7 +104,7 @@ function openEditDialog(userGameEntry, card){
     document.getElementById("editTitle").value = userGameEntry.title;
     document.getElementById("editCoverURL").value = userGameEntry.coverURL;
     document.getElementById("editReview").value = userGameEntry.review;
-    document.getElementById("editRating").value = userGameEntry.value;
+    document.getElementById("editRating").value = userGameEntry.rating ?? "";
     document.querySelector(`input[name="editStatus"][value="${userGameEntry.status}"]`).checked = true;
     //cant just set value on radio group, instead find specific radio whose value matches current entrys and set checked=true on it
 
@@ -277,4 +278,5 @@ logoutbtn.addEventListener("click", async() => {
 
 //-----------------------------------------------------------------------------------------------
 
-document.addEventListener("DOMContentLoaded", loadCollection);
+document.addEventListener("DOMContentLoaded", loadCollection); //runs once when the page loads
+document.getElementById("collectionView").addEventListener("change", loadCollection); //runs everytime the sort/filter drop down changed
