@@ -1,5 +1,6 @@
 package com.nathanthomson.gamecollectionweb;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 //https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html
@@ -13,6 +14,8 @@ public class User {
     private Long id;
 
     private String username;
+
+    @JsonIgnore
     private String password;
 
     public User(){
