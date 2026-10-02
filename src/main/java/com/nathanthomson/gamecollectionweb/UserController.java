@@ -1,8 +1,11 @@
 package com.nathanthomson.gamecollectionweb;
 
+import com.nathanthomson.gamecollectionweb.dto.LoginRequest;
+import com.nathanthomson.gamecollectionweb.dto.RegisterRequest;
 import com.nathanthomson.gamecollectionweb.dto.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +25,14 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse register(@RequestBody User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword())); //uses bcrypt for password
+    public UserResponse register(@RequestBody @Valid RegisterRequest request){
+        User user = new User(request.getUsername(), passwordEncoder.encode(request.getPassword())); //uses bcrypt for password
         User savedUser = userRepository.save(user); //saves details to the user
         return new UserResponse(savedUser.getId(), savedUser.getUsername()); //user response used to prevent returning password back
     }
 
     @PostMapping("/login")
-    public UserResponse login(@RequestBody User loginRequest, HttpServletRequest request){
+    public UserResponse login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest request){
         User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new RuntimeException("Invalid Credentials"));
         //if no user has this username, throw exception
 
