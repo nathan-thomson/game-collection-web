@@ -1,13 +1,18 @@
 package com.nathanthomson.gamecollectionweb.dto;
 
 import com.nathanthomson.gamecollectionweb.Status;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public class UpdateGameRequest {
 
+    @NotBlank
     private String title;
     private String coverURL;
+
+    @Min(1) @Max(5)
     private Integer rating;
+
+    @Size(max = 255)
     private String review;
     @NotNull
     private Status status;
